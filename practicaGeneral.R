@@ -1,12 +1,15 @@
-#Script de la práctica
+##Script de la práctica##
 
-#Instalacion y carga de paquetes
+#Instalacion y carga de paquetes#
 #install.packages("palmerpenguins")
 library(palmerpenguins)
 library(dplyr)
 
 #Carga de los datos
 data(package = "palmerpenguins", penguins)
+
+
+##Ejercicio 1##
 
 #Número de individuos totales, masculinos y femeninos por especie
 penguins_sex <- penguins %>% 
@@ -36,3 +39,5 @@ penguins_stats <- penguins %>%
             min_body_mass = min(body_mass_g, na.rm = TRUE),
             max_body_mass = max(body_mass_g, na.rm = TRUE),) %>%
   glimpse()
+
+##Ejercicio 2##
