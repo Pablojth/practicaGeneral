@@ -18,6 +18,18 @@ penguins_sex <- penguins %>%
   dplyr::count(species)%>% 
   glimpse()
 
+penguins_sex <- penguins %>% 
+  select(species, sex)%>% 
+  filter(sex=="male") %>% 
+  dplyr::count(species)%>% 
+  glimpse()
+
+penguins_sex <- penguins %>% 
+  select(species, sex)%>% 
+  filter(sex=="female") %>% 
+  dplyr::count(species)%>% 
+  glimpse()
+
 #La media, desviación estándar, valor mínimo y máximo de la longitud y profundidad del pico, 
 #la longitud de la aleta y el tamaño
 
