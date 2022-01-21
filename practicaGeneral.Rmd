@@ -4,33 +4,123 @@ author: "Pablo J. Torres Hernandez"
 date: "21/1/2022"
 output: html_document
 ---
-Librerias utilizadas en la práctica:
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+### **Los datos utilizados para la práctica provienen de la libreria palmerpenguins:**
+
+```{r datos, echo=TRUE}
+data(package = "palmerpenguins", penguins)
+```
+
+### **Librerias utilizadas en la práctica:**
+
+```{r, echo=TRUE}
 library(palmerpenguins)
 library(dplyr)
 library(plyr)
 library(ggplot2)
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# [**Ejercicio 1**]{.ul}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Número de individuos totales por especie
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r ej1.1.1, echo=TRUE}
+penguins_sex <- penguins %>% 
+  select(species, sex)%>% 
+  dplyr::count(species)%>% 
+  glimpse()
 ```
 
-## Including Plots
+Número de individuos masculinos por especie
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r ej1.1.2, echo=TRUE}
+penguins_sex <- penguins %>% 
+  select(species, sex)%>% 
+  filter(sex=="male") %>% 
+  dplyr::count(species)%>% 
+  glimpse()
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Número de individuos femeninos por especie
+
+```{r ej1.1.3, echo=TRUE}
+penguins_sex <- penguins %>% 
+  select(species, sex)%>% 
+  filter(sex=="female") %>% 
+  dplyr::count(species)%>% 
+  glimpse()
+```
+
+La media, desviación estándar, valor mínimo y máximo de la longitud y profundidad del pico, la longitud de la aleta y el tamaño.
+
+```{r ej1.2, echo=TRUE}
+penguins_stats <- penguins %>%
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)%>% 
+  summarise(mean_length = mean(bill_length_mm, na.rm = TRUE),
+            sd_bill_length = sd(bill_length_mm, na.rm = TRUE),
+            min_bill_length = min(bill_length_mm, na.rm = TRUE),
+            max_bill_length = max(bill_length_mm, na.rm = TRUE),
+            mean_bill_depth = mean(bill_depth_mm, na.rm = TRUE),
+            sd_bill_depth = sd(bill_depth_mm, na.rm = TRUE),
+            min_bill_depth = min(bill_depth_mm, na.rm = TRUE),
+            max_bill_depth = max(bill_depth_mm, na.rm = TRUE),
+            mean_flipper_length = mean(flipper_length_mm, na.rm = TRUE),
+            sd_flipper_length = sd(flipper_length_mm, na.rm = TRUE),
+            min_flipper_length = min(flipper_length_mm, na.rm = TRUE),
+            max_flipper_length = max(flipper_length_mm, na.rm = TRUE),
+            mean_body_mass = mean(body_mass_g, na.rm = TRUE),
+            sd_body_mass = sd(body_mass_g, na.rm = TRUE),
+            min_body_mass = min(body_mass_g, na.rm = TRUE),
+            max_body_mass = max(body_mass_g, na.rm = TRUE)) %>%
+  glimpse()
+```
+
+# [**Ejercicio 2**]{.ul}
+
+Un gráfico de barras que represente el número de individuos muestreados de cada especie en cada isla, representando las especies en diferentes colores (chinstrap -- morado, gentoo -- azul, adelie -- naranja)
+
+```{r ej2, echo=TRUE}
+graf_stats <- penguins %>% 
+  select(species, island) 
+
+ggplot(data=graf_stats) +
+  geom_bar(aes(x=island, fill=species)) +
+  scale_fill_manual(values=c("darkorange", "mediumorchid", "mediumblue"))
+```
+
+¿Qué especie se ha muestreado en las tres islas?
+
+*La especie Adelie se ha muestreado en las tres islas*
+
+¿Cuántos individuos se han muestreado de la isla Dream?
+
+```{r estadistico}
+summary(graf_stats)
+```
+
+*En la isla de dream se han muestreado 124 individuos*
+
+# [**Ejercicio 3**]{.ul}
+
+Un gráfico multipanel de cajas y bigotes del tamaño de los pingüinos según su sexo, donde aparezca un panel para cada especie.
+
+```{r ej3, echo=TRUE}
+penguins_na_rm <- penguins[complete.cases(penguins), ]
+
+ggplot(data = penguins_na_rm) + 
+  geom_boxplot(aes(x = sex, y = body_mass_g), na.rm = TRUE) +
+  facet_grid(cols = vars(species))
+```
+
+¿Qué especie tiene mayor tamaño?
+
+*La especie Gentoo*
+
+¿En qué especie las hembras y los machos tienen un tamaño más similar?
+
+*La especie Chinstrap*
