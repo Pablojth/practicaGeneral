@@ -61,3 +61,22 @@ print("La especie Adelie se ha muestreado en las tres islas")
 #¿cuántos individuos se han muestreado de la isla Dream?
 
 print("En la isla de dream se han muestreado 124 individuos")
+
+##Ejercicio 3##
+
+#Un gráfico multipanel de cajas y bigotes del tamaño de los pingüinos según su sexo, 
+#donde aparezca un panel para cada especie. 
+
+penguins_na_rm <- penguins[complete.cases(penguins), ]
+
+ggplot(data = penguins_na_rm) + 
+  geom_boxplot(aes(x = sex, y = body_mass_g), na.rm = TRUE) +
+  facet_grid(cols = vars(species))
+
+#Contesta a las siguientes preguntas: ¿qué especie tiene mayor tamaño? 
+
+print("La especie Gentoo tiene un mayor tamaño")
+
+#¿en qué especie las hembras y los machos tienen un tamaño más similar?
+
+print("La especie Chinstrap tiene un tamaño mas similar entre machos y hembras")
